@@ -9,7 +9,7 @@ import Models.User;
 
 public class PlanController {
     // plan -> name,id,price ,duration,speed limit
-    private static List<HashMap<String, String>> AoP = new ArrayList<>();
+    public static List<HashMap<String, String>> AoP = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
     static {
         LoadPlans();
@@ -37,12 +37,15 @@ public class PlanController {
     public static void SubcribePlan(int uId, int p) {
         User u = UserController.RetreiveUser(uId);
         u.cpIdSetter(String.valueOf(p));
+        UserController.saveUserFile();
         System.out.printf("Current plan of %s is %s", u.nameGetter(), u.cpIdGetter());
     }
 
     public static void CancelPlan(int uId) {
         User u = UserController.RetreiveUser(uId);
+        u.history.add(u.cpIdGetter());
         u.cpIdSetter(null);
+        UserController.saveUserFile();
         System.out.printf("Current plan of %s is %s", u.nameGetter(), u.cpIdGetter());
         System.out.println(" Cancelled successfully");
     }
@@ -68,6 +71,7 @@ public class PlanController {
             sc.nextLine();
             u.history.add(u.cpIdGetter());
             u.cpIdSetter(String.valueOf(x));
+            UserController.saveUserFile();
             System.out.printf("The current plan of %s is %s", u.nameGetter(), u.cpIdGetter());
             System.out.println("Upgraded the plan successfully");
         }
@@ -94,6 +98,7 @@ public class PlanController {
             sc.nextLine();
             u.history.add(u.cpIdGetter());
             u.cpIdSetter(String.valueOf(x));
+            UserController.saveUserFile();
             System.out.printf("The current plan of %s is %s", u.nameGetter(), u.cpIdGetter());
             System.out.println("Upgraded the plan successfully");
         }

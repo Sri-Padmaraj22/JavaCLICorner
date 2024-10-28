@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String uname, password, address, mobile, cpId;
     private int uId;
     public List<String> history = new ArrayList<String>();
+    public List<String> feedback = new ArrayList<String>();
 
     public User(int uId, String uname, String password, String address, String mobile) {
         this.uId = uId;

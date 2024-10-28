@@ -5,11 +5,12 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import Models.User;
 
 public class UserController {
-    private static List<User> AoU;
+    private static List<User> AoU = new ArrayList<>();
     private static String USERS_FILE = "E:/JAVA PT/Basics_Of_OOPs/JavaCLICorner/BroadBandApp/File/Users.txt";
 
     static {
@@ -66,6 +67,8 @@ public class UserController {
             if (uId == i.idGetter()) {
                 i.updateSetter(name, password, address, mobile);
                 System.out.println("Updated the account information successfully");
+                UserController.saveUserFile();
+                return;
             }
         }
         System.out.println("Update not done");
@@ -85,5 +88,42 @@ public class UserController {
             }
         }
         return null;
+    }
+
+    public static void SubscriptionHistory(int uId) {
+        User u = UserController.RetreiveUser(uId);
+        System.out.println("Your subscription history...");
+        for (String pid : u.history) {
+            for (HashMap<String, String> plan : PlanController.AoP) {
+                if (pid.equals(plan.get("id"))) {
+                    System.out.printf("Plan name - %s Plan price - %s and plan id - %s", plan.get("name"),
+                            plan.get("price"), plan.get("id"));
+                }
+            }
+        }
+    }
+
+    public static void ProvideFeedback(int uId, String f) {
+        User u = UserController.RetreiveUser(uId);
+        u.feedback.add(f);
+        UserController.saveUserFile();
+        System.out.println("Feedback submitted successfully");
+    }
+
+    public static void ListAllFeedback() {
+        for (User u : AoU) {
+            System.out.printf("Feedback of %s - \n", u.nameGetter());
+            for (String feed : u.feedback) {
+                System.out.println(feed);
+            }
+        }
+    }
+
+    public static void ListSpecificFeedback(int uId) {
+        User u = UserController.RetreiveUser(uId);
+        System.out.println("Your feedback about our service");
+        for (String feed : u.feedback) {
+            System.out.println(feed);
+        }
     }
 }

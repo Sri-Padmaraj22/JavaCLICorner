@@ -108,6 +108,13 @@ public class Main {
                         System.out.println("You dont have any current plan to cancel/upgrade/downgrade");
                     }
                 }
+                case 4 -> {
+                    System.out.println("Enter your valuable feedback :");
+                    String f = sc.nextLine();
+                    UserController.ProvideFeedback(uId, f);
+                }
+                case 5 -> UserController.ListAllFeedback();
+                case 6 -> UserController.SubscriptionHistory(uId);
                 case 7 -> {
                     UserController.displayUser(uId);
                     System.out.println("Enter the username :");
