@@ -3,58 +3,61 @@ package Controllers;
 public class ConverterController {
     public static String errorMessage;
 
-    public static boolean isInteger(String value) {
+    public static boolean isIntegerOnly(String value) {
         return !value.contains(".");
     }
 
-    public static String integerConversionToTargetBase(String UserValue, int UserSourceBase, int UserTargetBase) {
-        int convertedBase10Value = 0;
-        String convertedTargetBaseValue;
+    public static String convertIntegerToTargetBase(String inputValue, int sourceBase, int targetBase) {
+        int base10Value = 0;
+        String targetBaseValue;
 
         try {
-            convertedBase10Value = Integer.parseInt(UserValue, UserSourceBase);
+            base10Value = Integer.parseInt(inputValue, sourceBase);
         } catch (NumberFormatException nfe) {
-            errorMessage = String.format("Error - Please Give a Valid Value for the given Base\n %s", nfe.getMessage());
+            errorMessage = String.format("Error - Please Give a Valid Value for the given Base\n%s", nfe.getMessage());
         }
-        convertedTargetBaseValue = Integer.toString(convertedBase10Value, UserTargetBase);
-        return errorMessage == null ? convertedTargetBaseValue : errorMessage;
+
+        targetBaseValue = Integer.toString(base10Value, targetBase);
+        return errorMessage == null ? targetBaseValue : errorMessage;
     }
 
-    public static String decimalConversionHelper(String UserValue, int UserSourceBase, int UserTargetBase) {
-        // source base -> base 10
-        double resultBase10Converted = 0.0;
-        for (int i = 0; i < UserValue.length(); i++) {
-            char c = UserValue.charAt(i);
-            int digit = Character.digit(c, UserSourceBase);
-            resultBase10Converted = resultBase10Converted + digit / Math.pow(UserSourceBase, i + 1);
+    private static double convertFractionToBase10(String fractionPart, int sourceBase) {
+        double base10Fraction = 0.0;
+        for (int i = 0; i < fractionPart.length(); i++) {
+            char c = fractionPart.charAt(i);
+            int digit = Character.digit(c, sourceBase);
+            base10Fraction += digit / Math.pow(sourceBase, i + 1);
         }
+        return base10Fraction;
+    }
 
-        // base 10 -> target base ( binary )
-        int precision = 5;
-        double frac = resultBase10Converted;
-        String resultTargetBaseConverted = new String();
-        while (frac != 0.0 && precision != 0) {
-            frac = frac * UserTargetBase;
-            int digit = (int) frac;
-            resultTargetBaseConverted = resultTargetBaseConverted + Character.forDigit(digit, UserTargetBase);
-            frac = frac - digit;
+    private static String convertBase10FractionToTarget(double fraction, int targetBase, int precision) {
+        StringBuilder convertedFraction = new StringBuilder();
+
+        while (fraction != 0.0 && precision > 0) {
+            fraction *= targetBase;
+            int digit = (int) fraction;
+            convertedFraction.append(Character.forDigit(digit, targetBase));
+            fraction -= digit;
             precision--;
         }
-        return resultTargetBaseConverted;
+        return convertedFraction.toString();
     }
 
-    public static String decimalConversionToTargetBase(String UserValue, int UserSourceBase, int UserTargetBase) {
-        String ValueParts[] = UserValue.split("\\.");
-        String integerPart = integerConversionToTargetBase(ValueParts[0], UserSourceBase, UserTargetBase);
-        String fracPart = decimalConversionHelper(ValueParts[1], UserSourceBase, UserTargetBase);
-        return String.format("%s.%s", integerPart, fracPart);
+    public static String convertDecimalToTargetBase(String inputValue, int sourceBase, int targetBase) {
+        String[] parts = inputValue.split("\\.");
+        String integerPart = convertIntegerToTargetBase(parts[0], sourceBase, targetBase);
+        double base10Fraction = convertFractionToBase10(parts[1], sourceBase);
+        String fractionalPart = convertBase10FractionToTarget(base10Fraction, targetBase, 5);
+
+        return String.format("%s.%s", integerPart, fractionalPart);
     }
 
-    public static String convert(String UserValue, int UserSourceBase, int UserTargetBase) {
-        if (ConverterController.isInteger(UserValue)) {
-            return ConverterController.integerConversionToTargetBase(UserValue, UserSourceBase, UserTargetBase);
+    public static String convertNumber(String inputValue, int sourceBase, int targetBase) {
+        if (isIntegerOnly(inputValue)) {
+            return convertIntegerToTargetBase(inputValue, sourceBase, targetBase);
         } else {
-            return ConverterController.decimalConversionToTargetBase(UserValue, UserSourceBase, UserTargetBase);
+            return convertDecimalToTargetBase(inputValue, sourceBase, targetBase);
         }
     }
 }

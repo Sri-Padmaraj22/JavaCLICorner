@@ -1,12 +1,30 @@
 package Models;
 
-public class Conversion {
-    public String value, result, errorMessage;
-    public int sourceBase, targetBase;
+import java.io.Serializable;
 
-    public Conversion(String value, int sourceBase, int targetBase) {
-        this.value = value;
+public class Conversion implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public String inputValue;
+    public String result;
+    public String errorMessage;
+    public int sourceBase;
+    public int targetBase;
+
+    public Conversion(String inputValue, int sourceBase, int targetBase) {
+        this.inputValue = inputValue;
         this.sourceBase = sourceBase;
         this.targetBase = targetBase;
+    }
+
+    @Override
+    public String toString() {
+        return "Conversion{" +
+                "inputValue='" + inputValue + '\'' +
+                ", sourceBase=" + sourceBase +
+                ", targetBase=" + targetBase +
+                ", result='" + result + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
+                '}';
     }
 }
