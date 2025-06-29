@@ -1,6 +1,6 @@
-package controllers;
+package FarmerRetailerAuction.controllers;
 
-import models.Bid;
+import FarmerRetailerAuction.models.*;
 
 import java.io.*;
 import java.util.*;

@@ -1,4 +1,4 @@
-package models;
+package FarmerRetailerAuction.models;
 
 import java.io.Serializable;
 

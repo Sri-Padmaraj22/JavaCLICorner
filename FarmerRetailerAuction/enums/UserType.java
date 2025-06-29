@@ -1,4 +1,4 @@
-package enums;
+package FarmerRetailerAuction.enums;
 
 public enum UserType {
     FARMER,
