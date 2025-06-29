@@ -14,9 +14,10 @@ public class Main {
             case 1 -> Main.RegisterMenu();
             case 2 -> Main.LoginMenu();
             case 3 -> {
-                return;
+                
             }
         }
+        sc.close();
     }
 
     public static void RegisterMenu() {
@@ -34,6 +35,7 @@ public class Main {
             case "STUDENT" -> studentMenu(uid);
             default -> System.out.println("invalid user type");
         }
+        sc.close();
     }
 
     public static void LoginMenu() {
@@ -51,6 +53,7 @@ public class Main {
             case "STUDENT" -> studentMenu(uid);
             default -> System.out.println("invalid user type");
         }
+        sc.close();
     }
 
     public static void adminMenu(String uid) {
@@ -72,7 +75,9 @@ public class Main {
                 sc.nextLine();
                 UserController.DisplayQuiz(a);
             }
+            
         }
+        sc.close();
     }
 
     public static void teacherMenu(String uid) {
@@ -94,6 +99,7 @@ public class Main {
                 UserController.ScheduleQuiz(uid, a, dname, year);
             }
         }
+        sc.close();
     }
 
     public static void studentMenu(String uid) {
@@ -105,5 +111,7 @@ public class Main {
         int marks = UserController.testQuiz(dname, year);
         System.out.println(marks);
         UserController.AssignMarks(dname, year, uid, marks);
+        sc.close();
     }
+    
 }
